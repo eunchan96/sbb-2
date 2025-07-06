@@ -2,6 +2,7 @@ package com.back.domain.question.question.service;
 
 import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.repositrory.QuestionRepository;
+import com.back.global.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class QuestionService {
     }
 
     public Question getQuestion(int id) {
-        return questionRepository.findById(id).get();
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("404-1", "해당 글이 존재하지 않습니다."));
     }
 }
