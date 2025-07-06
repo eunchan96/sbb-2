@@ -19,4 +19,8 @@ public class Answer extends BaseEntity {
 
     @ManyToOne
     private Question question;
+
+    public void modify(String content) {
+        this.content = content;
+    }
 }

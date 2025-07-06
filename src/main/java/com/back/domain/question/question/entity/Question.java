@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
@@ -41,5 +42,16 @@ public class Question extends BaseEntity {
     public void modify(String subject, String content) {
         this.subject = subject;
         this.content = content;
+    }
+
+    public Optional<Answer> findAnswerById(int id) {
+        return answers.stream()
+                .filter(answer -> answer.getId() == id)
+                .findFirst();
+    }
+
+    public boolean deleteAnswer(Answer answer) {
+        if (answer == null) return false;
+        return answers.remove(answer);
     }
 }

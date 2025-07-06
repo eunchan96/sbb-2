@@ -1,5 +1,6 @@
 package com.back.domain.question.question.service;
 
+import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.repositrory.QuestionRepository;
 import com.back.global.exception.ServiceException;
@@ -43,5 +44,9 @@ public class QuestionService {
 
     public void modify(Question question, String subject, String content) {
         question.modify(subject, content);
+    }
+
+    public boolean deleteAnswer(Question question, Answer answer) {
+        return question.deleteAnswer(answer);
     }
 }

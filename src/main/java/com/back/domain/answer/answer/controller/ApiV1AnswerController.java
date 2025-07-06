@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/questions/{questionId}/answers")
 @RequiredArgsConstructor
@@ -40,6 +42,65 @@ public class ApiV1AnswerController {
         return new RsData<>(
                 "201-1",
                 "%d번 답변이 작성되었습니다.".formatted(answer.getId()),
+                new AnswerDto(answer)
+        );
+    }
+
+
+    @GetMapping
+    @Transactional(readOnly = true)
+    public List<AnswerDto> getItems(@PathVariable int questionId) {
+        Question question = questionService.getQuestion(questionId);
+
+        return question.getAnswers().stream()
+                .map(AnswerDto::new)
+                .toList();
+    }
+
+    @GetMapping("/{id}")
+    @Transactional(readOnly = true)
+    public AnswerDto getItem(@PathVariable int questionId, @PathVariable int id) {
+        Question question = questionService.getQuestion(questionId);
+        Answer answer = question.findAnswerById(id).get();
+        return new AnswerDto(answer);
+    }
+
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public RsData<AnswerDto> delete(@PathVariable int questionId, @PathVariable int id) {
+        Question question = questionService.getQuestion(questionId);
+        Answer answer = question.findAnswerById(id).get();
+
+        questionService.deleteAnswer(question, answer);
+
+        return new RsData<>(
+                "200-1",
+                "%d번 답변이 삭제되었습니다.".formatted(id),
+                new AnswerDto(answer)
+        );
+    }
+
+
+    record AnswerModifyReqBody(
+            @NotBlank
+            @Size(min = 2, max = 500)
+            String content
+    ) {}
+    @PutMapping("/{id}")
+    @Transactional
+    public RsData<AnswerDto> modify(
+            @PathVariable int questionId, @PathVariable int id,
+            @Valid @RequestBody AnswerModifyReqBody reqBody
+    ) {
+        Question question = questionService.getQuestion(questionId);
+        Answer answer = question.findAnswerById(id).get();
+
+        answerService.modify(answer, reqBody.content);
+
+        return new RsData<>(
+                "200-1",
+                "%d번 답변이 수정되었습니다.".formatted(id),
                 new AnswerDto(answer)
         );
     }

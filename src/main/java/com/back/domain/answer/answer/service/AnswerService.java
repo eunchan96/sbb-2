@@ -9,4 +9,8 @@ public class AnswerService {
     public Answer create(Question question, String content) {
         return question.addAnswer(content);
     }
+
+    public void modify(Answer answer, String content) {
+        answer.modify(content);
+    }
 }
