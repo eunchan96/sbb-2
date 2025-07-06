@@ -17,10 +17,10 @@ import java.util.List;
 public class ApiV1QuestionController {
     private final QuestionService questionService;
 
-    @GetMapping("/list")
+    @GetMapping
     @Transactional(readOnly = true)
     public List<QuestionDto> getItems() {
-        List<Question> items = questionService.findAll();
+        List<Question> items = questionService.getList();
 
         return items.stream()
                 .map(QuestionDto::new)

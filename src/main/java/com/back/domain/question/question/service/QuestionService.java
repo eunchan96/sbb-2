@@ -23,7 +23,7 @@ public class QuestionService {
         return questionRepository.count();
     }
 
-    public List<Question> findAll() {
+    public List<Question> getList() {
         return questionRepository.findAll();
     }
 }
