@@ -32,4 +32,8 @@ public class QuestionService {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new ServiceException("404-1", "해당 글이 존재하지 않습니다."));
     }
+
+    public void flush() {
+        questionRepository.flush();
+    }
 }
