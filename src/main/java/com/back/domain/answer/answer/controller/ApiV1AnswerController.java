@@ -51,8 +51,9 @@ public class ApiV1AnswerController {
     @Transactional(readOnly = true)
     public List<AnswerDto> getItems(@PathVariable int questionId) {
         Question question = questionService.getQuestion(questionId);
+        List<Answer> items = answerService.getList(question);
 
-        return question.getAnswers().stream()
+        return items.stream()
                 .map(AnswerDto::new)
                 .toList();
     }
@@ -61,7 +62,7 @@ public class ApiV1AnswerController {
     @Transactional(readOnly = true)
     public AnswerDto getItem(@PathVariable int questionId, @PathVariable int id) {
         Question question = questionService.getQuestion(questionId);
-        Answer answer = question.findAnswerById(id).get();
+        Answer answer = answerService.getAnswer(question, id);
         return new AnswerDto(answer);
     }
 
@@ -70,9 +71,9 @@ public class ApiV1AnswerController {
     @Transactional
     public RsData<AnswerDto> delete(@PathVariable int questionId, @PathVariable int id) {
         Question question = questionService.getQuestion(questionId);
-        Answer answer = question.findAnswerById(id).get();
+        Answer answer = answerService.getAnswer(question, id);
 
-        questionService.deleteAnswer(question, answer);
+        answerService.delete(question, answer);
 
         return new RsData<>(
                 "200-1",
@@ -87,6 +88,7 @@ public class ApiV1AnswerController {
             @Size(min = 2, max = 500)
             String content
     ) {}
+
     @PutMapping("/{id}")
     @Transactional
     public RsData<AnswerDto> modify(
@@ -94,7 +96,7 @@ public class ApiV1AnswerController {
             @Valid @RequestBody AnswerModifyReqBody reqBody
     ) {
         Question question = questionService.getQuestion(questionId);
-        Answer answer = question.findAnswerById(id).get();
+        Answer answer = answerService.getAnswer(question, id);
 
         answerService.modify(answer, reqBody.content);
 
