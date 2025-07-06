@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ import static jakarta.persistence.CascadeType.REMOVE;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Question extends BaseEntity {
     @Column(length = 200)
@@ -30,10 +28,13 @@ public class Question extends BaseEntity {
     @OneToMany(mappedBy = "question", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<Answer> answers = new ArrayList<>();
 
+    public Question(String subject, String content) {
+        this.subject = subject;
+        this.content = content;
+    }
+
     public Answer addAnswer(String content) {
-        Answer answer = new Answer();
-        answer.setContent(content);
-        answer.setQuestion(this);
+        Answer answer = new Answer(content, this);
 
         answers.add(answer);
         return answer;

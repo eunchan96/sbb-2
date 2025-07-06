@@ -7,11 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Answer extends BaseEntity {
     @Column(columnDefinition = "TEXT")
@@ -19,6 +17,11 @@ public class Answer extends BaseEntity {
 
     @ManyToOne
     private Question question;
+
+    public Answer(String content, Question question) {
+        this.content = content;
+        this.question = question;
+    }
 
     public void modify(String content) {
         this.content = content;
