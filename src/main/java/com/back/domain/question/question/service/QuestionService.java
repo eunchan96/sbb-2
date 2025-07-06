@@ -36,4 +36,12 @@ public class QuestionService {
     public void flush() {
         questionRepository.flush();
     }
+
+    public void delete(Question question) {
+        questionRepository.delete(question);
+    }
+
+    public void modify(Question question, String subject, String content) {
+        question.modify(subject, content);
+    }
 }
