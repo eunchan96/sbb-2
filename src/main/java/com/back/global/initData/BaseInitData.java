@@ -1,5 +1,6 @@
 package com.back.global.initData;
 
+import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,10 @@ public class BaseInitData {
 
         String subject2 = "스프링부트 모델 질문입니다.";
         String content2 = "id는 자동으로 생성되나요?";
-        questionService.create(subject2, content2);
+        Question question = questionService.create(subject2, content2);
+
+        question.addAnswer("네, 자동으로 생성됩니다.");
+
+        System.out.println("기본 데이터가 초기화되었습니다.");
     }
 }
