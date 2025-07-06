@@ -6,6 +6,7 @@ import com.back.domain.question.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,5 +26,12 @@ public class ApiV1QuestionController {
         return items.stream()
                 .map(QuestionDto::new)
                 .toList();
+    }
+
+    @GetMapping("/{id}")
+    @Transactional(readOnly = true)
+    public QuestionDto getItem(@PathVariable int id) {
+        Question question = questionService.getQuestion(id);
+        return new QuestionDto(question);
     }
 }
