@@ -4,6 +4,7 @@ import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.answer.answer.repository.AnswerRepository;
 import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.repositrory.QuestionRepository;
+import com.back.domain.question.question.service.QuestionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class QuestionRepositoryTests {
 
     @Autowired
     private AnswerRepository answerRepository;
+
+    @Autowired
+    private QuestionService questionService;
 
     @Test
     @DisplayName("findAll")
@@ -70,7 +74,7 @@ public class QuestionRepositoryTests {
     @DisplayName("수정")
     void t6() {
         Question question = questionRepository.findById(1).get();
-        question.setSubject("수정된 제목");
+        questionService.modify(question, "수정된 제목", "수정된 내용");
         questionRepository.save(question);
 
         Question updatedQuestion = questionRepository.findBySubject("수정된 제목").get();
@@ -92,11 +96,7 @@ public class QuestionRepositoryTests {
     @DisplayName("답변 저장 1")
     void t8() {
         Question question = questionRepository.findById(2).get();
-
-        Answer answer = new Answer();
-        answer.setContent("네, 자동으로 생성됩니다.");
-        answer.setQuestion(question);
-        answerRepository.save(answer);
+        question.addAnswer("네, 자동으로 생성됩니다.");
 
         assertThat(question.getAnswers().size()).isEqualTo(2);
     }
